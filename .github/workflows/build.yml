@@ -1,0 +1,58 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # 手动点按钮也能跑
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+
+      - name: Build all platforms
+        env:
+          CGO_ENABLED: 0
+        run: |
+          mkdir -p bin
+          # Windows 64位
+          GOOS=windows GOARCH=amd64 go build -ldflags "-w -s" -o bin/sub-check-collector-windows-amd64.exe
+          # Linux 64位
+          GOOS=linux GOARCH=amd64 go build -ldflags "-w -s" -o bin/sub-check-collector-linux-amd64
+          # macOS 64位
+          GOOS=darwin GOARCH=amd64 go build -ldflags "-w -s" -o bin/sub-check-collector-darwin-amd64
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: bin/
+
+  # 可选：自动发布到 Release（需要仓库权限）
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries
+          path: bin/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
