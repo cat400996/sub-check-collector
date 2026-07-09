@@ -2,8 +2,8 @@
 
 自动从 GitHub 搜索并收集 V2Ray、Clash 等代理订阅链接的工具。
 
-> **注意:** 本工具会自动更新 [Subs-Check](https://github.com/xream/sub-check) 的 `config.yaml` 文件。首次使用时:
-> 1. 将 Subs-Check 的 `config.yaml` 文件拷贝到本工具目录下,或
+> **注意:** 本工具会自动更新 [Subs-Check-Pro](https://github.com/sinspired/sub-check-pro) 的 `config.yaml` 文件。首次使用时:
+> 1. 将 Subs-Check-Pro 的 `config.yaml` 文件拷贝到本工具目录下,或
 > 2. 使用本工具提供的 `config.yaml.example` 复制为 `config.yaml`
 
 
@@ -84,7 +84,7 @@ OUTPUT_FILE=./output/subscriptions.md
 # 最大搜索仓库数
 MAX_REPOSITORIES=30
 
-# config.yaml 文件路径 (自动更新subs-check配置文件的sub-urls)
+# config.yaml 文件路径 (自动更新 subs-check-pro 配置文件的sub-urls)
 CONFIG_YAML_PATH=./config.yaml
 
 # 质量过滤 (可选)
